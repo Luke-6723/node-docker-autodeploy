@@ -1,0 +1,19 @@
+{
+  "name": "docker-node-autodeploy",
+  "version": "0.0.1",
+  "description": "A auto deploy service for node projects running inside docker.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luke-6723/node-docker-autodeploy.git"
+  },
+  "author": "Luke-6723",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Luke-6723/node-docker-autodeploy/issues"
+  },
+  "homepage": "https://github.com/Luke-6723/node-docker-autodeploy#readme"
+}
