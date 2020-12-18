@@ -108,7 +108,25 @@ app.post('/github/autodeploy', async (req, res) => {
                   color: 38912
                 }]
               })
+              await sendWebhook({
+                embeds: [{
+                  title: `Restarting container`,
+                  color: 16525609
+                }]
+              })
             }
+            container.restart().then(async () => {
+              console.log('Updated container successfully')
+              if (process.env.DISCORD_WEBHOOK_URL) {
+                console.log('Sending SUCCESS discord webhook')
+                await sendWebhook({
+                  embeds: [{
+                    title: `Successfully deployed update.`,
+                    color: 38912
+                  }]
+                })
+              }
+            })
           })
         })
       } else res.status(400)
