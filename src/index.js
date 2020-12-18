@@ -154,7 +154,7 @@ app.post('/github/autodeploy', async (req, res) => {
                   await sendWebhook({
                     embeds: [{
                       title: `Restarting container`,
-                      color: 26623
+                      color: 16742656
                     }]
                   })
                 }
