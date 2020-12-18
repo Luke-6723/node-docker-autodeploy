@@ -42,8 +42,8 @@ const sendWebhook = async (message) => {
 // Post endpoint for github webhook
 app.post('/github/autodeploy', async (req, res) => {
   if(req.body.repository.name === process.env.REPO_NAME) {
-    if(req.action === 'completed') {
-      if(req.check_run.name === process.env.ACTION_NAME) {
+    if(req.body.action === 'completed') {
+      if(req.body.check_run.name === process.env.ACTION_NAME) {
         console.log('Recieved action completion.')
         // Handle discord webhook if any
         if (process.env.DISCORD_WEBHOOK_URL) {
