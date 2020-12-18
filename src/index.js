@@ -101,7 +101,7 @@ app.post('/github/autodeploy', async (req, res) => {
             await sendWebhook({
               embeds: [{
                 title: `Successfully updated dependencies`,
-                description: `\`\`\`${output}\`\`\``,
+                description: `**${output}**`,
                 color: 38912
               }]
             })
