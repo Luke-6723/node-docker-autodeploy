@@ -22,11 +22,12 @@ app.post('/', (req, res) => {
 // Send webhook function
 /**
  * @param { String || Object<DiscordWebhookEmbed> } message The message to send to discord.
- * @return {Promise<void>}
+ * @return {Promise<*>}
  */
 const sendWebhook = async (message) => {
-  if(typeof message === 'string') message = { content: message }
-  await fetch(process.env.DISCORD_WEBHOOK_URL, {
+  if(typeof message === 'string') message = JSON.stringify({ content: message })
+  message = JSON.stringify(message)
+  return await fetch(process.env.DISCORD_WEBHOOK_URL, {
     method: 'post',
     body: message
   })
