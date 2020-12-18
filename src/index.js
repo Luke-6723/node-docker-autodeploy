@@ -3,7 +3,7 @@ require('dotenv').config()
 
 // Dependencies
 const express = require('express')
-
+const fetch = require('node-fetch')
 const app = express()
 
 // Body parser middleware
@@ -19,10 +19,44 @@ app.post('/', (req, res) => {
   res.status(200).send('OK')
 })
 
+// Send webhook function
+/**
+ * @param { String || Object<DiscordWebhookEmbed> } message The message to send to discord.
+ * @return {Promise<void>}
+ */
+const sendWebhook = async (message) => {
+  if(typeof message === 'string') message = { content: message }
+  await fetch(process.env.DISCORD_WEBHOOK_URL, {
+    method: 'post',
+    body: message
+  })
+}
+
+/**
+ * Colors:
+ * Recieved => #7289DA
+ * Successful => #009800
+ * Error / Unsuccessful => #FC2929
+ */
+
 // Post endpoint for github webhook
-app.post('/github/autodeploy', (req, res) => {
-  console.log(req.headers)
-  console.log(req.body)
+app.post('/github/autodeploy', async (req, res) => {
+  if(req.body.repository.name === process.env.REPO_NAME) {
+    if(req.action === 'completed') {
+      if(req.check_run.name === process.env.ACTION_NAME) {
+        console.log('Recieved action completion.')
+        // Handle discord webhook if any
+        if (process.env.DISCORD_WEBHOOK_URL) {
+          await sendWebhook({
+            embeds: [{
+              title: `Recieved ${process.env.ACTION_NAME} completion.`,
+              color: '#7289DA'
+            }]
+          })
+        }
+      }
+    } else res.status(400)
+  } else res.status(400)
 })
 
 // Allow lowercase and uppercase
