@@ -7,7 +7,7 @@ RUN apt-get -y install curl
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash
 RUN apt-get -y install nodejs
 #Set better shell because /bin/sh sux and doesnt support arrow keys
-WORKDIR /web
+WORKDIR /autodeploy
 SHELL ["/bin/bash", "-c"]
 
 # Copy package.json for dependencies
@@ -15,4 +15,4 @@ COPY package.json .
 
 RUN npm install
 
-CMD cd ./src && node .
+CMD node .
