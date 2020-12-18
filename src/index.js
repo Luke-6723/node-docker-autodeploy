@@ -10,7 +10,7 @@ const app = express()
 app.use(bodyparser.json())
 
 // Github ping route
-app.get('/github/autodeploy', (req, res) => {
+app.get(['/', '/github/autodeploy'], (req, res) => {
   res.status(200).send('OK')
 })
 
