@@ -28,6 +28,9 @@ const sendWebhook = async (message) => {
   if(typeof message === 'string') message = JSON.stringify({ content: message })
   message = JSON.stringify(message)
   return await fetch(process.env.DISCORD_WEBHOOK_URL, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
     method: 'post',
     body: message
   })
