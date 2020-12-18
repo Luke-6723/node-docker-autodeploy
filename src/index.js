@@ -35,9 +35,8 @@ const sendWebhook = async (message) => {
 
 /**
  * Colors:
- * Recieved => #7289DA
- * Successful => #009800
- * Error / Unsuccessful => #FC2929
+ * Green => 38912
+ * Red => 16525609
  */
 
 // Post endpoint for github webhook
@@ -46,16 +45,21 @@ app.post('/github/autodeploy', async (req, res) => {
     if(req.body.action === 'completed') {
       if(req.body.check_run.name === process.env.ACTION_NAME) {
         console.log('Recieved action completion.')
+
         // Handle discord webhook if any
         if (process.env.DISCORD_WEBHOOK_URL) {
           await sendWebhook({
             embeds: [{
               title: `Recieved ${process.env.ACTION_NAME} completion.`,
-              color: '#7289DA'
+              color: 38912
             }]
           })
         }
-      }
+
+
+
+
+      } else res.status(400)
     } else res.status(400)
   } else res.status(400)
 })
