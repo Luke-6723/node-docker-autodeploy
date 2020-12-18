@@ -48,9 +48,9 @@ const sendWebhook = async (message) => {
 
 // Post endpoint for github webhook
 app.post('/github/autodeploy', async (req, res) => {
-  if(req.body.repository.name === process.env.REPO_NAME) {
-    if(req.body.action === 'completed') {
-      if(req.body.check_run.name === process.env.ACTION_NAME) {
+  if(req.body?.repository?.name === process.env.REPO_NAME) {
+    if(req.body?.action === 'completed') {
+      if(req.body?.check_run?.name === process.env.ACTION_NAME) {
         res.status(200).send('OK')
         console.log('Recieved action completion.')
 
