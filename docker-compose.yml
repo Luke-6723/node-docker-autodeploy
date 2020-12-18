@@ -1,6 +1,6 @@
 version: '3'
 services:
-  pryocdn_website:
+  node_autodeploy:
     container_name: node-autodeploy
     restart: always
     build:

@@ -32,7 +32,7 @@ Make sure the docker compose is configured the way you want it:
 ```dockerfile
 version: '3'
 services:
-  pryocdn_website:
+  node_autodeploy:
     container_name: node-autodeploy
     restart: always
     build:
