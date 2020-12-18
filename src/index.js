@@ -3,11 +3,16 @@ require('dotenv').config()
 
 // Dependencies
 const express = require('express')
-const bodyparser = require('body-parser')
+
 const app = express()
 
 // Body parser middleware
+const bodyparser = require('body-parser')
 app.use(bodyparser.json())
+
+// Github payload verification middleware
+const verifyPayload = require('./util/verifyPayload')
+app.use(verifyPayload)
 
 // Github ping route
 app.post('/', (req, res) => {
