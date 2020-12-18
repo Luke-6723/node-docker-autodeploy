@@ -44,6 +44,7 @@ const sendWebhook = async (message) => {
  * Colors:
  * Green => 38912
  * Red => 16525609
+ * Orange => 16742656
  */
 
 // Post endpoint for github webhook
