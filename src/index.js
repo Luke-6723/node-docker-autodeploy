@@ -79,7 +79,7 @@ app.post('/github/autodeploy', async (req, res) => {
             await sendWebhook({
               embeds: [{
                 title: `Updating dependencies`,
-                color: 38912
+                color: 16742656
               }]
             })
           }
