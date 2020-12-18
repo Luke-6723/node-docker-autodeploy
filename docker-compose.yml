@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ./autodeploy/src:/src
+      - ./:/autodeploy
       - /var/run/docker.sock:/var/run/docker.sock
     env_file: .env
     ports:
