@@ -109,17 +109,11 @@ app.post('/github/autodeploy', async (req, res) => {
                   color: 38912
                 }]
               })
-              await sendWebhook({
-                embeds: [{
-                  title: `Restarting container`,
-                  color: 16525609
-                }]
-              })
             }
             return container.exec.create({
               AttachStdout: true,
               AttachStderr: true,
-              Cmd: [ 'npm', 'install' ]
+              Cmd: [ 'git', 'pull' ]
             }).then(async exec => {
               // Start exec
               if (process.env.DISCORD_WEBHOOK_URL) {
