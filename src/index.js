@@ -51,6 +51,7 @@ app.post('/github/autodeploy', async (req, res) => {
   if(req.body.repository.name === process.env.REPO_NAME) {
     if(req.body.action === 'completed') {
       if(req.body.check_run.name === process.env.ACTION_NAME) {
+        res.status(200).send('OK')
         console.log('Recieved action completion.')
 
         // Handle discord webhook if any
@@ -129,7 +130,6 @@ app.post('/github/autodeploy', async (req, res) => {
             })
           })
         })
-        res.status(200).send('OK')
       } else res.status(400)
     } else res.status(400)
   } else res.status(400)
