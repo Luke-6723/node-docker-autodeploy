@@ -14,6 +14,10 @@ app.use(bodyparser.json())
 const verifyPayload = require('./util/verifyPayload')
 app.use(verifyPayload)
 
+// Docker API
+const { Docker } = require('node-docker-api');
+const docker = new Docker({ socketPath: process.env.DOCKER_SOCKET_PATH || '/var/run/docker.sock' });
+
 // Github ping route
 app.post('/', (req, res) => {
   res.status(200).send('OK')
@@ -57,8 +61,11 @@ app.post('/github/autodeploy', async (req, res) => {
               title: `Recieved ${process.env.ACTION_NAME} completion.`,
               color: 38912
             }]
-          }).then(console.log)
+          })
         }
+
+        const container = await docker.container.get(process.env.DOCKER_CONTAINER_NAME)
+        console.log(container)
 
 
 
