@@ -71,7 +71,7 @@ app.post('/github/autodeploy', async (req, res) => {
         return container.exec.create({
           AttachStdout: true,
           AttachStderr: true,
-          Cmd: [ 'git', 'pull', '&&', 'npm', 'install' ]
+          Cmd: [ 'npm', 'install' ]
         }).then(async exec => {
           // Start exec
           if (process.env.DISCORD_WEBHOOK_URL) {
@@ -116,17 +116,67 @@ app.post('/github/autodeploy', async (req, res) => {
                 }]
               })
             }
-            container.restart().then(async () => {
-              console.log('Updated container successfully')
+            return container.exec.create({
+              AttachStdout: true,
+              AttachStderr: true,
+              Cmd: [ 'npm', 'install' ]
+            }).then(async exec => {
+              // Start exec
               if (process.env.DISCORD_WEBHOOK_URL) {
-                console.log('Sending SUCCESS discord webhook')
+                console.log('Sending UPDATING discord webhook')
                 await sendWebhook({
                   embeds: [{
-                    title: `Successfully deployed update.`,
+                    title: `Pulled from git successfully`,
                     color: 38912
                   }]
                 })
               }
+              return exec.start({ detach: false })
+            }).then(stream => {
+              let output = ''
+              stream.on('data', d => console.log(d.toString()))
+              stream.on('error', e => async () => {
+                console.log(e)
+                if (process.env.DISCORD_WEBHOOK_URL) {
+                  console.log('Sending ERROR discord webhook')
+                  await sendWebhook({
+                    embeds: [{
+                      title: `ERROR`,
+                      description: 'Check console for more information',
+                      color: 16525609
+                    }]
+                  })
+                }
+              })
+              stream.on('end', async () => {
+                if (process.env.DISCORD_WEBHOOK_URL) {
+                  console.log('Sending SUCCESS discord webhook')
+                  await sendWebhook({
+                    embeds: [{
+                      title: `Successfully updated dependencies`,
+                      color: 38912
+                    }]
+                  })
+                  await sendWebhook({
+                    embeds: [{
+                      title: `Restarting container`,
+                      color: 26623
+                    }]
+                  })
+                }
+                container.restart().then(async () => {
+                  console.log('Updated container successfully')
+                  if (process.env.DISCORD_WEBHOOK_URL) {
+                    console.log('Sending SUCCESS discord webhook')
+                    await sendWebhook({
+                      embeds: [{
+                        title: `Successfully deployed update.`,
+                        color: 38912
+                      }]
+                    })
+                  }
+                })
+              })
             })
           })
         })
