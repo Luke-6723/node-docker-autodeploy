@@ -20,7 +20,7 @@ app.post('/github/autodeploy', (req, res) => {
 })
 
 // Allow lowercase and uppercase
-const PORT = Number(process.env.PORT) || Number(process.env.port)
+const PORT = process.env.PORT || process.env.port
 const HOST = process.env.HOST || process.env.host
 
 // Listen
