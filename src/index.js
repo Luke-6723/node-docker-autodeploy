@@ -129,6 +129,7 @@ app.post('/github/autodeploy', async (req, res) => {
             })
           })
         })
+        res.status(200).send('OK')
       } else res.status(400)
     } else res.status(400)
   } else res.status(400)
