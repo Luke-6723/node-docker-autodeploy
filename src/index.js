@@ -85,7 +85,7 @@ app.post('/github/autodeploy', async (req, res) => {
           return exec.start({ detach: false })
         }).then(stream => {
           let output = ''
-          stream.on('data', d => console.log(d => d.toString()))
+          stream.on('data', d => console.log(d.toString()))
           stream.on('error', e => async () => {
             console.log(e)
             if (process.env.DISCORD_WEBHOOK_URL) {
