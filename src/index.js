@@ -85,8 +85,9 @@ app.post('/github/autodeploy', async (req, res) => {
           return exec.start({ detach: false })
         }).then(stream => {
           let output = ''
-          stream.on('data', d => output += `${d.toString('utf8').replace(/^B/, '').replace(/[^\x20-\x7E]+/g, '').trim()}\n`)
+          stream.on('data', console.log)
           stream.on('error', e => async () => {
+            console.log(e)
             if (process.env.DISCORD_WEBHOOK_URL) {
               console.log('Sending ERROR discord webhook')
               await sendWebhook({
@@ -104,7 +105,6 @@ app.post('/github/autodeploy', async (req, res) => {
               await sendWebhook({
                 embeds: [{
                   title: `Successfully updated dependencies`,
-                  description: `\`\`\`${output}\`\`\``,
                   color: 38912
                 }]
               })
