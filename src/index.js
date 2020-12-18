@@ -55,7 +55,7 @@ app.post('/github/autodeploy', async (req, res) => {
 
         // Handle discord webhook if any
         if (process.env.DISCORD_WEBHOOK_URL) {
-          console.log('Sending discord webhook')
+          console.log('Sending RECIEVE discord webhook')
           await sendWebhook({
             embeds: [{
               title: `Recieved ${process.env.ACTION_NAME} completion.`,
@@ -64,12 +64,50 @@ app.post('/github/autodeploy', async (req, res) => {
           })
         }
 
-        const container = await docker.container.get(process.env.DOCKER_CONTAINER_NAME)
-        console.log(container)
-
-
-
-
+        // Get container
+        docker.container.get(process.env.DOCKER_CONTAINER_NAME).then(container => {
+          // Create execution command
+          return container.exec.create({
+            AttachStdout: true,
+            AttachStderr: true,
+            Cmd: [ 'npm', 'install' ]
+          }).then(async exec => {
+            // Start exec
+            if (process.env.DISCORD_WEBHOOK_URL) {
+              console.log('Sending UPDATING discord webhook')
+              await sendWebhook({
+                embeds: [{
+                  title: `Updating dependencies`,
+                  color: 38912
+                }]
+              })
+            }
+            return exec.start({ detach: false })
+          }).then(stream => {
+            let output = ''
+            stream.on('data', d => out += `${d}\n`)
+            stream.on('error', e => async () => {
+              console.log('Sending ERROR discord webhook')
+              await sendWebhook({
+                embeds: [{
+                  title: `ERROR`,
+                  description: 'Check console for more information',
+                  color: 16525609
+                }]
+              })
+            })
+            stream.on('end', async () => {
+              console.log('Sending SUCCESS discord webhook')
+              await sendWebhook({
+                embeds: [{
+                  title: `Successfully updated dependencies`,
+                  description: `\`\`\`${output}\`\`\``,
+                  color: 16525609
+                }]
+              })
+            })
+          })
+        })
       } else res.status(400)
     } else res.status(400)
   } else res.status(400)
