@@ -71,7 +71,7 @@ app.post('/github/autodeploy', async (req, res) => {
         return container.exec.create({
           AttachStdout: true,
           AttachStderr: true,
-          Cmd: [ 'npm', 'install' ]
+          Cmd: [ 'git', 'pull', '&&', 'npm', 'install' ]
         }).then(async exec => {
           // Start exec
           if (process.env.DISCORD_WEBHOOK_URL) {
