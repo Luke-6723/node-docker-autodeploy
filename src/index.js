@@ -3,7 +3,7 @@ require('dotenv').config()
 
 // Dependencies
 const express = require('express')
-const bodyparser = require('bodyparser')
+const bodyparser = require('body-parser')
 const app = express()
 
 // Body parser middleware
