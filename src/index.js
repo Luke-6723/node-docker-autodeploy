@@ -48,12 +48,13 @@ app.post('/github/autodeploy', async (req, res) => {
 
         // Handle discord webhook if any
         if (process.env.DISCORD_WEBHOOK_URL) {
+          console.log('Sending discord webhook')
           await sendWebhook({
             embeds: [{
               title: `Recieved ${process.env.ACTION_NAME} completion.`,
               color: 38912
             }]
-          })
+          }).then(console.log)
         }
 
 
