@@ -85,7 +85,7 @@ app.post('/github/autodeploy', async (req, res) => {
           return exec.start({ detach: false })
         }).then(stream => {
           let output = ''
-          stream.on('data', d => output += `${d.replace('', '').trim()}\n`)
+          stream.on('data', d => output += `${d.toString('utf8').replace('', '').trim()}\n`)
           stream.on('error', e => async () => {
             console.log('Sending ERROR discord webhook')
             await sendWebhook({
