@@ -85,26 +85,30 @@ app.post('/github/autodeploy', async (req, res) => {
           return exec.start({ detach: false })
         }).then(stream => {
           let output = ''
-          stream.on('data', d => output += `${d.toString('utf8').replace(/[^\x20-\x7E]+/g, '').trim()}\n`)
+          stream.on('data', d => output += `${d.toString('utf8').replace(/^B/, '').replace(/[^\x20-\x7E]+/g, '').trim()}\n`)
           stream.on('error', e => async () => {
-            console.log('Sending ERROR discord webhook')
-            await sendWebhook({
-              embeds: [{
-                title: `ERROR`,
-                description: 'Check console for more information',
-                color: 16525609
-              }]
-            })
+            if (process.env.DISCORD_WEBHOOK_URL) {
+              console.log('Sending ERROR discord webhook')
+              await sendWebhook({
+                embeds: [{
+                  title: `ERROR`,
+                  description: 'Check console for more information',
+                  color: 16525609
+                }]
+              })
+            }
           })
           stream.on('end', async () => {
-            console.log('Sending SUCCESS discord webhook')
-            await sendWebhook({
-              embeds: [{
-                title: `Successfully updated dependencies`,
-                description: `**${output}**`,
-                color: 38912
-              }]
-            })
+            if (process.env.DISCORD_WEBHOOK_URL) {
+              console.log('Sending SUCCESS discord webhook')
+              await sendWebhook({
+                embeds: [{
+                  title: `Successfully updated dependencies`,
+                  description: `\`\`\`${output}\`\`\``,
+                  color: 38912
+                }]
+              })
+            }
           })
         })
       } else res.status(400)
