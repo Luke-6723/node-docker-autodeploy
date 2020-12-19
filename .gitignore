@@ -71,6 +71,8 @@ typings/
 # Output of 'npm pack'
 *.tgz
 
+docker-compose.yml
+
 # Yarn Integrity file
 .yarn-integrity
 
