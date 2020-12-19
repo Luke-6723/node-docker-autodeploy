@@ -147,7 +147,7 @@ app.post('/github/autodeploy', async (req, res) => {
                   console.log('Sending SUCCESS discord webhook')
                   await sendWebhook({
                     embeds: [{
-                      title: `Successfully updated dependencies`,
+                      title: `Successfully pulled from git`,
                       color: 38912
                     }]
                   })
